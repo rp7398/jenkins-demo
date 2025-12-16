@@ -7,9 +7,9 @@ pipeline {
 
     stages {
 
-        stage('Checkout Code') {
+        stage('Checkout') {
             steps {
-                echo 'Code will be checked out by Jenkins'
+                echo 'Code checked out from GitHub'
             }
         }
 
@@ -19,10 +19,32 @@ pipeline {
             }
         }
 
+        stage('Install Dependencies') {
+            steps {
+                bat "\"%PYTHON%\" -m pip install --upgrade pip"
+                bat "\"%PYTHON%\" -m pip install -r requirements.txt"
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                bat "\"%PYTHON%\" -m pytest"
+            }
+        }
+
         stage('Run App') {
             steps {
                 bat "\"%PYTHON%\" app.py"
             }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ All tests passed. Build successful!'
+        }
+        failure {
+            echo '❌ Tests failed. Fix the code!'
         }
     }
 }
