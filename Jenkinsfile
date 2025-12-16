@@ -2,27 +2,28 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "jenkins-flask-api"
+        PYTHON = 'C:\\Users\\Rajat Pathak\\AppData\\Local\\Programs\\Python\\Python314\\python.exe'
+        IMAGE_NAME = 'jenkins-flask-api'
     }
 
     stages {
 
-        stage('Checkout Code') {
+        stage('Check Python') {
             steps {
-                echo 'Code pulled from GitHub automatically'
+                bat "\"%PYTHON%\" --version"
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                bat 'python -m pip install --upgrade pip'
-                bat 'pip install -r requirements.txt'
+                bat "\"%PYTHON%\" -m pip install --upgrade pip"
+                bat "\"%PYTHON%\" -m pip install -r requirements.txt"
             }
         }
 
         stage('Run Unit Tests') {
             steps {
-                bat 'pytest'
+                bat "\"%PYTHON%\" -m pytest"
             }
         }
 
@@ -41,10 +42,10 @@ pipeline {
 
     post {
         success {
-            echo '✅ CI/CD Pipeline completed successfully!'
+            echo '✅ Pipeline completed successfully!'
         }
         failure {
-            echo '❌ Pipeline failed. Fix errors!'
+            echo '❌ Pipeline failed. Check above logs.'
         }
     }
 }
