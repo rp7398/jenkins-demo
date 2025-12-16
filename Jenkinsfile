@@ -23,7 +23,7 @@ pipeline {
 
         stage('Run Unit Tests') {
             steps {
-                bat "\"%PYTHON%\" -m pytest"
+                bat 'set PYTHONPATH=%CD% && "%PYTHON%" -m pytest'
             }
         }
 
